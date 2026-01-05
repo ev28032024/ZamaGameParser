@@ -59,19 +59,6 @@ python main.py
 
 Для остановки нажмите **Ctrl+C** — программа корректно завершит работу.
 
-## Структура проекта
-
-```
-├── config.yaml           # Конфигурация
-├── requirements.txt      # Зависимости
-├── main.py              # Точка входа
-├── adspower_client.py   # AdsPower API
-├── sheets_manager.py    # Google Sheets
-├── browser_automation.py # Patchright автоматизация
-├── game_logic.py        # Логика игры
-└── service_account.json # (добавить) Google credentials
-```
-
 ## Логика работы
 
 1. Читает serial_number профилей из Google Sheets
