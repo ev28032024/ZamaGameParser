@@ -1,0 +1,65 @@
+# Zashapon Testnet Automation Configuration
+
+# AdsPower Local API settings
+adspower:
+  base_url: "http://localhost:50325"
+
+# Google Sheets settings
+google_sheets:
+  # Path to service account JSON credentials file
+  credentials_file: "service_account.json"
+  
+  # Your Google Spreadsheet ID (from the URL)
+  spreadsheet_id: "YOUR_SPREADSHEET_ID"
+  
+  # Sheet name to use
+  sheet_name: "Sheet1"
+  
+  # Column configuration (column letters)
+  columns:
+    serial_number: "A"      # Profile serial_number from AdsPower
+    address: "B"            # Wallet address (not used)
+    mail: "C"               # iCloud mail (not used)
+    daruma_zama: "D"        # Daruma Zama card
+    daruma_monk: "E"        # Daruma Monk card
+    daruma_wave: "F"        # Daruma Wave card
+    daruma_devil: "G"       # Daruma Devil card
+    daruma_fox: "H"         # Daruma Fox card
+    daruma_lantern: "I"     # Daruma Lantern card
+    daruma_cat: "J"         # Daruma Cat card
+    daruma_kumo: "K"        # Daruma Kumo card
+    daruma_sakura: "L"      # Daruma Sakura card
+    all_ready: "M"          # All ready status (not used)
+    status_error: "N"       # Status/Error column
+  
+  # Starting row for data (first row is headers)
+  data_start_row: 2
+
+# Threading settings
+threading:
+  # Maximum number of concurrent browser profiles
+  max_workers: 3
+
+# Game URLs and selectors
+game:
+  base_url: "https://www.zashapon.com/"
+  collection_url: "https://zashapon.com/collection"
+  
+  # Timeouts (in milliseconds)
+  page_load_timeout: 60000
+  element_wait_timeout: 30000
+  
+  # Wait for "Add to Collection" button to appear (max seconds)
+  animation_max_wait: 120
+
+# Card names for collection parsing
+cards:
+  - "Daruma Zama"
+  - "Daruma Monk"
+  - "Daruma Wave"
+  - "Daruma Devil"
+  - "Daruma Fox"
+  - "Daruma Lantern"
+  - "Daruma Cat"
+  - "Daruma Kumo"
+  - "Daruma Sakura"
