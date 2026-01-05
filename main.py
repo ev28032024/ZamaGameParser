@@ -95,25 +95,37 @@ def main():
     
     # Process profiles with thread pool
     results: Dict[str, dict] = {}
+    executor = ThreadPoolExecutor(max_workers=max_workers)
+    futures = {}
     
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+    try:
         # Submit all tasks
-        futures = {
-            executor.submit(
+        for serial_number in profile_numbers:
+            if shutdown_flag.is_set():
+                print("[!] Shutdown requested, skipping remaining profiles...")
+                break
+            future = executor.submit(
                 process_profile_safe,
                 serial_number,
                 adspower_client,
                 game_config
-            ): serial_number
-            for serial_number in profile_numbers
-        }
+            )
+            futures[future] = serial_number
         
         # Process completed tasks
         for future in as_completed(futures):
+            # Check for shutdown before processing result
+            if shutdown_flag.is_set():
+                print("[!] Shutdown requested, canceling pending tasks...")
+                # Cancel all pending futures
+                for f in futures:
+                    f.cancel()
+                break
+            
             serial_number = futures[future]
             
             try:
-                result_serial, success, cards, status = future.result()
+                result_serial, success, cards, status = future.result(timeout=1)
                 results[result_serial] = {
                     "success": success,
                     "cards": cards,
@@ -139,6 +151,15 @@ def main():
                     "status": f"Exception: {e}"
                 }
     
+    except KeyboardInterrupt:
+        print("\n[!] KeyboardInterrupt received, stopping...")
+        shutdown_flag.set()
+    
+    finally:
+        # Shutdown executor - cancel pending, don't wait
+        print("[i] Shutting down executor...")
+        executor.shutdown(wait=False, cancel_futures=True)
+    
     # Summary
     print("-" * 50)
     success_count = sum(1 for r in results.values() if r["success"])
@@ -152,3 +173,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

@@ -43,6 +43,10 @@ def process_profile(
     cards = {}
     
     try:
+        # Check for shutdown before starting
+        if shutdown_flag.is_set():
+            return False, {}, "Shutdown requested"
+        
         # Step 1: Start AdsPower profile
         print(f"[{serial_number}] Starting AdsPower profile...")
         result = adspower_client.start_profile(serial_number)
